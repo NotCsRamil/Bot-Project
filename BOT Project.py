@@ -40,5 +40,5 @@ async def _8ball(ctx,*, question):
 
 
     
-client.run("NzY2MjY0Njc1MzQ4MTE5NTUy.X4g1lw.uXGf8nniNL4-9H2q1bd947LgZj8")
+client.run("token")
 
