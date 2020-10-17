@@ -116,7 +116,7 @@ async def punch(ctx,arg):
 
 client.command()
 async def nandri(ctx):
-    if ctx.message.author.id == 6012 :
+    if ctx.message.author.id == '6012':
         await ctx.send('Puriyuthu')
         await ctx.bot.logout()
     else :
