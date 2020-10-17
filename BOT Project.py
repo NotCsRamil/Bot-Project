@@ -38,7 +38,7 @@ class MyContext(commands.Context):
 #ping command   
 @client.command()
 async def ping(ctx):
-    await ctx.send(f'pong! {round(client.latency*1000)}ms<:abeysaale:731486907208433724>')
+    await ctx.send(f'pong! {round(client.latency*1000)}ms<a:cat_vibing:753973817608634468>')
 
 #Fortune teller
 @client.command(aliases=["8ball","test"])
@@ -114,10 +114,10 @@ async def punch(ctx,arg):
     'abishai' : 'Saami Munaadi Daan Shaanthama Pesuven. Sakaada Munaadi Ila.',}
     await ctx.send(punchs.get(arg.lower(),"Taap ana paare <:abeysaale:731486907208433724>"),tts = True)
 
-client.command()
-async def nandri(ctx):
-    if ctx.message.author.id == '6012':
-        await ctx.send('Puriyuthu')
-        await ctx.bot.logout()
+@client.command()
+async def poda(ctx):
+    if ctx.message.author.discriminator == '6012' :
+        await ctx.send('Ok BOSS')
+        await client.logout()
     else :
-        await ctx.send('panni,do u have common sense')
+        await ctx.send('You messed With the Wrong Person')
