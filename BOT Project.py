@@ -1,12 +1,15 @@
 import discord
 import os
 import asyncio
-import tracemalloc
 import random
 from discord.ext import commands, tasks
 from itertools import cycle
+from discord.ext import commands
 
-tracemalloc.start()
+
+
+
+
 
 client= commands.Bot(command_prefix = "&")
 status = cycle(["Ghilli","Pokkiri","Vettaikaran","Kaavalan","Thuppaki","Katthi","Mersal","Sarkar","Bigil"])
@@ -16,24 +19,21 @@ async def on_ready():
     changemovies.start()
     print(f"{client.user} has connected to discord...\n")
 
+'''class Myclient(discord.Client):
+    async def on_ready(self):
+        print('Logged on as {0}!'.format(self.user))
+
+    async def on_message(self, message):
+        print('Message from {0.author}: {0.content}'.format(message))
+        if message.author.bot:
+            return
+        await message.channel.send("vanakam")'''
+
     #await client.change_presence(status=discord.Status.idle, activity=discord.Game("Ghilli"))
 
 
-class MyContext(commands.Context):
-    async def tick(self, value):
-        # reacts to the message with an emoji
-        # depending on whether value is True or False
-        # if its True, it'll add a green check mark
-        # otherwise, it'll add a red cross mark
-        emoji = '\N{WHITE HEAVY CHECK MARK}' if value else '\N{CROSS MARK}'
-        try:
-            # this will react to the command author's message
-            await self.message.add_reaction(emoji)
-        except discord.HTTPException:
-            # sometimes errors occur during this, for example
-            # maybe you dont have permission to do that
-            # we dont mind, so we can just ignore them
-            pass
+    
+
 
 #ping command   
 @client.command()
@@ -79,6 +79,29 @@ async def moonji(ctx, user: discord.User = None):
         user = ctx.message.author
     await ctx.send(user.avatar_url_as())
 
+#fantasy team
+@client.command()
+async def vijays_11(ctx):
+    ramil = ['https://cdn.discordapp.com/attachments/751422342709903370/767777080653250580/Screenshot_61.png']
+             
+    await ctx.send(random.choice(ramil))
+@client.command()
+async def rounaks_11(ctx):
+    rounak = ['https://cdn.discordapp.com/attachments/674567305291890701/767728850318524481/UCL_fantasy.png']
+             
+    await ctx.send(random.choice(rounak))
+@client.command()
+async def abizois_11(ctx):
+    abizoi = ['https://cdn.discordapp.com/attachments/751422342709903370/767766344547827732/unknown.png']
+             
+    await ctx.send(random.choice(abizoi))
+@client.command()
+async def ayaans_11(ctx):
+    ayaan = ['https://cdn.discordapp.com/attachments/751422342709903370/767773795070377985/unknown.png']
+             
+    await ctx.send(random.choice(ayaan))
+
+
 
 #movie cycle
 @tasks.loop(seconds=3)
@@ -117,7 +140,7 @@ async def punch(ctx,arg):
 @client.command()
 async def poda(ctx):
     if ctx.message.author.discriminator == '6012' :
-        await ctx.send('Ok BOSS')
+        await ctx.send('Ok BOSS <a:polish_cow:767665553187012639>')
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
