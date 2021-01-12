@@ -2,6 +2,7 @@ import discord
 import os
 import asyncio
 import random
+import json
 from discord.ext import commands, tasks
 from itertools import cycle
 from discord.ext import commands
@@ -30,6 +31,50 @@ async def on_ready():
         await message.channel.send("vanakam")'''
 
     #await client.change_presence(status=discord.Status.idle, activity=discord.Game("Ghilli"))
+
+#lvls
+
+'''m = {}
+
+@client.event
+async def on_ready():
+    global m
+    with open("users.json", "r") as j:
+        m = json.load(j)
+        j.close()
+    if len(m) == 0:
+        m = {}
+        for member in client.get_guild(754716663529734254).members:
+            m[str(member.id)] = {"xp" : 0, "messageCountdown" : 0}
+    print("ready")
+    while True:
+        try:
+            for member in client.get_guild(754716663529734254).members:
+                m[str(member.id)]["messageCountdown"] -= 1
+        except:
+            pass
+        await asyncio.sleep(1)
+
+@client.event
+async def on_message(message):
+    global m
+    if message.content == "&stop" and message.author.id == 677071327265423360:
+        with open("users.json", "w") as j:
+            j.write( json.dumps(m) )
+            j.close()
+        await client.close()
+    elif message.content == "&xp":
+        await message.channel.send( str(m[str(message.author.id)]["xp"]) )
+    elif message.author != client.user:
+        if m[str(message.author.id)]["messageCountdown"] <= 0:
+            m[str(message.author.id)]["xp"] += 10
+            m[str(message.author.id)]["messageCountdown"] = 10
+
+@client.event
+async def on_member_join(member):
+    m[str(member.id)] = {"xp" : 0, "messageCountdown" : 0}'''
+
+
 
 
     
@@ -87,17 +132,17 @@ async def vijays_11(ctx):
     await ctx.send(random.choice(ramil))
 @client.command()
 async def rounaks_11(ctx):
-    rounak = ['https://cdn.discordapp.com/attachments/674567305291890701/767728850318524481/UCL_fantasy.png']
+    rounak = ['https://cdn.discordapp.com/attachments/751422342709903370/767979322584727562/team_2.png']
              
     await ctx.send(random.choice(rounak))
 @client.command()
 async def abizois_11(ctx):
-    abizoi = ['https://cdn.discordapp.com/attachments/751422342709903370/767766344547827732/unknown.png']
+    abizoi = ['https://cdn.discordapp.com/attachments/674567305291890701/768118602690854972/unknown.png']
              
     await ctx.send(random.choice(abizoi))
 @client.command()
 async def ayaans_11(ctx):
-    ayaan = ['https://cdn.discordapp.com/attachments/751422342709903370/767773795070377985/unknown.png']
+    ayaan = ['https://cdn.discordapp.com/attachments/751422342709903370/768106808958255134/Screenshot_20201020-174200_Chrome.jpg']
              
     await ctx.send(random.choice(ayaan))
 
@@ -137,6 +182,14 @@ async def punch(ctx,arg):
     'abishai' : 'Saami Munaadi Daan Shaanthama Pesuven. Sakaada Munaadi Ila.',}
     await ctx.send(punchs.get(arg.lower(),"Taap ana paare <:abeysaale:731486907208433724>"),tts = True)
 
+#admin commands
+@client.command()
+async def kick(ctx, member : discord.Member, *, reason=None):
+    await ctx.channel.send(
+        "Command Executed BOSS"
+        f"{member.mention} has been **kicked**")
+    await member.kick(reason=reason)
+
 @client.command()
 async def poda(ctx):
     if ctx.message.author.discriminator == '6012' :
@@ -144,3 +197,8 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
+'''client = Myclient()'''                     
+client.run("NzY2MjY0Njc1MzQ4MTE5NTUy.X4g1lw.aisadbOT5dQ4eGAXLwa5qgmmZ10")
+
+
+
