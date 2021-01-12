@@ -198,7 +198,7 @@ async def poda(ctx):
     else :
         await ctx.send('You messed With the Wrong Person')
 '''client = Myclient()'''                     
-client.run("NzY2MjY0Njc1MzQ4MTE5NTUy.X4g1lw.aisadbOT5dQ4eGAXLwa5qgmmZ10")
+client.run("your bot token")
 
 
 
