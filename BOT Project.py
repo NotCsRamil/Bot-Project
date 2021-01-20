@@ -167,9 +167,9 @@ async def ban(ctx, member : discord.Member, *, reason=None):
         f"{member.mention} Cannot enter this **Server**")
     await member.ban(reason=reason)
 
+#ramanan server
 @client.command()
 async def mute(ctx, member : discord.Member, *, reason=None):
-        reason = ' '.join(reason)
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
         await member.add_roles(mute_role, reason=reason)
         await ctx.channel.send("Command Executed BOSS "
@@ -180,6 +180,30 @@ async def unmute(ctx, member : discord.Member, *, reason=None):
     mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
     await member.remove_roles(mute_role)
     await ctx.channel.send(f"{member.mention} has been **unmuted**")
+
+
+#abizoi server
+@client.command()
+async def addAU(ctx, member : discord.Member, *, reason=None):
+    AU_role = discord.utils.get(ctx.guild.roles, name="AMONG US")
+    await member.add_roles(AU_role, reason=reason)
+    await ctx.channel.send(f"{member.mention} role alloted")
+
+@client.command()
+async def addbarca(ctx, member : discord.Member, *, reason=None):
+    barca_role = discord.utils.get(ctx.guild.roles, name="Barca")
+    await member.add_roles(barca_role, reason=reason)
+    await ctx.channel.send(f"{member.mention} role alloted")
+
+@client.command()
+async def addbayern(ctx, member : discord.Member, *, reason=None):
+    bayern_role = discord.utils.get(ctx.guild.roles, name="Bayern")
+    await member.add_roles(bayern_role, reason=reason)
+    await ctx.channel.send(f"{member.mention} role alloted")
+
+
+
+
 
 
 
@@ -360,7 +384,7 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''                     
+'''client = Myclient()'''             
 client.run("your bot token")
 
 
