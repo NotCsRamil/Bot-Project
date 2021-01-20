@@ -79,12 +79,7 @@ async def on_member_join(member):
 
     
 
-
-#ping command   
-@client.command()
-async def ping(ctx):
-    await ctx.send(f'pong! {round(client.latency*1000)}ms<a:cat_vibing:753973817608634468>')
-
+  
 #Fortune teller
 @client.command(aliases=["8ball","test"])
 async def _8ball(ctx,*, question):
@@ -112,10 +107,6 @@ async def _8ball(ctx,*, question):
     await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
 
 #Delete Message
-@client.command()
-async def clear(ctx, amount=3):
-    await ctx.channel.purge(limit=amount)
-
 
 #Show Avatars        
 @client.command()
@@ -123,28 +114,6 @@ async def moonji(ctx, user: discord.User = None):
     if user==None:
         user = ctx.message.author
     await ctx.send(user.avatar_url_as())
-
-#fantasy team
-@client.command()
-async def vijays_11(ctx):
-    ramil = ['https://cdn.discordapp.com/attachments/751422342709903370/767777080653250580/Screenshot_61.png']
-             
-    await ctx.send(random.choice(ramil))
-@client.command()
-async def rounaks_11(ctx):
-    rounak = ['https://cdn.discordapp.com/attachments/751422342709903370/767979322584727562/team_2.png']
-             
-    await ctx.send(random.choice(rounak))
-@client.command()
-async def abizois_11(ctx):
-    abizoi = ['https://cdn.discordapp.com/attachments/674567305291890701/768118602690854972/unknown.png']
-             
-    await ctx.send(random.choice(abizoi))
-@client.command()
-async def ayaans_11(ctx):
-    ayaan = ['https://cdn.discordapp.com/attachments/751422342709903370/768106808958255134/Screenshot_20201020-174200_Chrome.jpg']
-             
-    await ctx.send(random.choice(ayaan))
 
 
 
@@ -186,10 +155,166 @@ async def punch(ctx,arg):
 @client.command()
 async def kick(ctx, member : discord.Member, *, reason=None):
     await ctx.channel.send(
-        "Command Executed BOSS"
+        "Command Executed BOSS "
         f"{member.mention} has been **kicked**")
     await member.kick(reason=reason)
 
+
+@client.command()
+async def ban(ctx, member : discord.Member, *, reason=None):
+    await ctx.channel.send(
+        "Ban Hammer Stuck "
+        f"{member.mention} Cannot enter this **Server**")
+    await member.ban(reason=reason)
+
+@client.event
+async def on_member_join(self, member):
+        role = discord.utils.get(member.guild.roles, name='AMONG US')
+        await member.add_roles(role)
+
+@client.command()
+async def shoot(ctx, amount=3):
+    await ctx.channel.purge(limit=amount)
+
+@client.command()
+async def ping(ctx):
+    await ctx.send(f'pong! {round(client.latency*1000)}ms<a:cat_vibing:753973817608634468>')
+
+#TTT
+
+player1 = ""
+player2 = ""
+turn = ""
+gameOver = True
+
+board = []
+
+winningConditions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+]
+
+@client.command()
+async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
+    global count
+    global player1
+    global player2
+    global turn
+    global gameOver
+
+    if gameOver:
+        global board
+        board = [":white_large_square:", ":white_large_square:", ":white_large_square:",
+                 ":white_large_square:", ":white_large_square:", ":white_large_square:",
+                 ":white_large_square:", ":white_large_square:", ":white_large_square:"]
+        turn = ""
+        gameOver = False
+        count = 0
+
+        player1 = p1
+        player2 = p2
+
+        line = ""
+        for x in range(len(board)):
+            if x == 2 or x == 5 or x == 8:
+                line += " " + board[x]
+                await ctx.send(line)
+                line = ""
+            else:
+                line += " " + board[x]
+
+        num = random.randint(1, 2)
+        if num == 1:
+            turn = player1
+            await ctx.send("It is <@" + str(player1.id) + ">'s turn.")
+        elif num == 2:
+            turn = player2
+            await ctx.send("It is <@" + str(player2.id) + ">'s turn.")
+    else:
+        await ctx.send("A game is already in progress! Finish it before starting a new one.")
+
+@client.command()
+async def place(ctx, pos: int):
+    global turn
+    global player1
+    global player2
+    global board
+    global count
+
+    if not gameOver:
+        mark = ""
+        if turn == ctx.author:
+            if turn == player1:
+                mark = ":regional_indicator_x:"
+            elif turn == player2:
+                mark = ":o2:"
+            if 0 < pos < 10 and board[pos - 1] == ":white_large_square:":
+                board[pos - 1] = mark
+                count += 1
+
+                line = ""
+                for x in range(len(board)):
+                    if x == 2 or x == 5 or x == 8:
+                        line += " " + board[x]
+                        await ctx.send(line)
+                        line = ""
+                    else:
+                        line += " " + board[x]
+
+                checkWinner(winningConditions, mark)
+                if gameOver:
+                    await ctx.send(mark + " wins!")
+                elif count >= 9:
+                    await ctx.send("It's a tie!")
+
+                if turn == player1:
+                    turn = player2
+                elif turn == player2:
+                    turn = player1
+            else:
+                await ctx.send("Be sure to choose an integer between 1 and 9 (inclusive) and an unmarked tile.")
+        else:
+            await ctx.send("It is not your turn.")
+    else:
+        await ctx.send("Please start a new game using the &tictactoe command.")
+
+
+def checkWinner(winningConditions, mark):
+    global gameOver
+    for condition in winningConditions:
+        if board[condition[0]] == mark and board[condition[1]] == mark and board[condition[2]] == mark:
+            gameOver = True
+
+@tictactoe.error
+async def tictactoe_error(ctx, error):
+    print(error)
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("Please mention 2 players for this command.")
+    elif isinstance(error, commands.BadArgument):
+        await ctx.send("Please make sure to mention/ping players .")
+
+@place.error
+async def place_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("Please enter a position you would like to mark.")
+    elif isinstance(error, commands.BadArgument):
+        await ctx.send("Please make sure to enter an integer.")
+
+
+
+
+        
+    
+        
+           
+               
+        
 @client.command()
 async def poda(ctx):
     if ctx.message.author.discriminator == '6012' :
