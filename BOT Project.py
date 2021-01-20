@@ -167,10 +167,21 @@ async def ban(ctx, member : discord.Member, *, reason=None):
         f"{member.mention} Cannot enter this **Server**")
     await member.ban(reason=reason)
 
-@client.event
-async def on_member_join(self, member):
-        role = discord.utils.get(member.guild.roles, name='AMONG US')
-        await member.add_roles(role)
+@client.command()
+async def mute(ctx, member : discord.Member, *, reason=None):
+        reason = ' '.join(reason)
+        mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
+        await member.add_roles(mute_role, reason=reason)
+        await ctx.channel.send("Command Executed BOSS "
+        f"{member.mention} has been **muted**")
+
+@client.command()
+async def unmute(ctx, member : discord.Member, *, reason=None):
+    mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
+    await member.remove_roles(mute_role)
+    await ctx.channel.send(f"{member.mention} has been **unmuted**")
+
+
 
 @client.command()
 async def shoot(ctx, amount=3):
@@ -305,6 +316,33 @@ async def place_error(ctx, error):
         await ctx.send("Please enter a position you would like to mark.")
     elif isinstance(error, commands.BadArgument):
         await ctx.send("Please make sure to enter an integer.")
+
+#server info
+
+@client.command()
+async def server(ctx):
+    name = str(ctx.guild.name)
+    description = str(ctx.guild.description)
+
+    owner = str(ctx.guild.owner)
+    id = str(ctx.guild.id)
+    region = str(ctx.guild.region)
+    memberCount = str(ctx.guild.member_count)
+
+    icon = str(ctx.guild.icon_url)
+
+    embed = discord.Embed(
+        title=name + " Server Information",
+        description=description,
+        color=discord.Color.blue()
+    )
+    embed.set_thumbnail(url=icon)
+    embed.add_field(name="Owner", value=owner, inline=True)
+    embed.add_field(name="Server ID", value=id, inline=True)
+    embed.add_field(name="Region", value=region, inline=True)
+    embed.add_field(name="Member Count", value=memberCount, inline=True)
+
+    await ctx.send(embed=embed)
 
 
 
