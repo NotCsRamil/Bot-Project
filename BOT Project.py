@@ -152,6 +152,7 @@ async def punch(ctx,arg):
     await ctx.send(punchs.get(arg.lower(),"Taap ana paare <:abeysaale:731486907208433724>"),tts = True)
 
 #admin commands
+@commands.has_permissions(administrator=True)
 @client.command()
 async def kick(ctx, member : discord.Member, *, reason=None):
     await ctx.channel.send(
@@ -160,6 +161,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
     await member.kick(reason=reason)
 
 
+@commands.has_permissions(administrator=True)
 @client.command()
 async def ban(ctx, member : discord.Member, *, reason=None):
     await ctx.channel.send(
@@ -168,6 +170,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
     await member.ban(reason=reason)
 
 #ramanan server
+@commands.has_permissions(administrator=True)
 @client.command()
 async def mute(ctx, member : discord.Member, *, reason=None):
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
@@ -175,6 +178,7 @@ async def mute(ctx, member : discord.Member, *, reason=None):
         await ctx.channel.send("Command Executed BOSS "
         f"{member.mention} has been **muted**")
 
+@commands.has_permissions(administrator=True)
 @client.command()
 async def unmute(ctx, member : discord.Member, *, reason=None):
     mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
@@ -183,30 +187,48 @@ async def unmute(ctx, member : discord.Member, *, reason=None):
 
 
 #abizoi server
+@commands.has_permissions(administrator=True)
 @client.command()
 async def addAU(ctx, member : discord.Member, *, reason=None):
     AU_role = discord.utils.get(ctx.guild.roles, name="AMONG US")
     await member.add_roles(AU_role, reason=reason)
     await ctx.channel.send(f"{member.mention} role alloted")
 
+@commands.has_permissions(administrator=True)
 @client.command()
 async def addbarca(ctx, member : discord.Member, *, reason=None):
     barca_role = discord.utils.get(ctx.guild.roles, name="Barca")
     await member.add_roles(barca_role, reason=reason)
     await ctx.channel.send(f"{member.mention} role alloted")
 
+@commands.has_permissions(administrator=True)
+@client.command()
+async def addjuve(ctx, member : discord.Member, *, reason=None):
+    juve_role = discord.utils.get(ctx.guild.roles, name="Juventus")
+    await member.add_roles(juve_role, reason=reason)
+    await ctx.channel.send(f"{member.mention} role alloted")
+
+
+@commands.has_permissions(administrator=True)
 @client.command()
 async def addbayern(ctx, member : discord.Member, *, reason=None):
     bayern_role = discord.utils.get(ctx.guild.roles, name="Bayern")
     await member.add_roles(bayern_role, reason=reason)
     await ctx.channel.send(f"{member.mention} role alloted")
 
+'''@client.command()
+async def addyallaboi(ctx, member : discord.Member, *, reason=None):
+    yallaboi_role = discord.utils.get(ctx.guild.roles, name="yallaboi")
+    await member.add_roles(yallaboi_role, reason=reason)
+    await ctx.channel.send(f"{member.mention} role alloted")'''
+
+@client.event
+async def on_member_join(ctx, member : discord.Member, *, reason=None):
+        role = discord.utils.get(member.guild.roles, name='yallaboi')
+        await member.add_roles(role)
 
 
-
-
-
-
+@commands.has_permissions(administrator=True)
 @client.command()
 async def shoot(ctx, amount=3):
     await ctx.channel.purge(limit=amount)
@@ -320,6 +342,19 @@ async def place(ctx, pos: int):
         await ctx.send("Please start a new game using the &tictactoe command.")
 
 
+@client.command()
+async def end(ctx):
+  global gameOver
+  if not gameOver:
+    gameOver = True
+    await ctx.send("Stopping current game...")
+  else:
+    await ctx.send("There is currently no game running!")
+
+
+
+
+
 def checkWinner(winningConditions, mark):
     global gameOver
     for condition in winningConditions:
@@ -368,6 +403,38 @@ async def server(ctx):
 
     await ctx.send(embed=embed)
 
+#send DMS
+
+@client.event
+async def on_message(message):
+    empty_array = []
+    general_channel = discord.utils.get(client.get_all_channels(), name="general")
+
+    if message.author == client.user:
+        return
+    if str(message.channel.type) == "private":
+        if message.attachments != empty_array:
+            files = message.attachments
+            await general_channel.send("[" + message.author.display_name + "]")
+
+            for file in files:
+                await general_channel.send(file.url)
+        else:
+            await general_channel.send("[" + message.author.display_name + "] " + message.content)
+
+    elif str(message.channel) == "general" and message.content.startswith("<"):
+        member_object = message.mentions[0]
+        if message.attachments != empty_array:
+            files = message.attachments
+            await member_object.send("[" + message.author.display_name + "]")
+
+            for file in files:
+                await member_object.send(file.url)
+        else:
+            index = message.content.index(" ")
+            string = message.content
+            mod_message = string[index:]
+            await member_object.send("[" + message.author.display_name + "]" + mod_message)
 
 
 
@@ -384,7 +451,7 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''             
+'''client = Myclient()'''                             
 client.run("your bot token")
 
 
