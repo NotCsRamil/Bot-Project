@@ -6,19 +6,27 @@ import json
 from discord.ext import commands, tasks
 from itertools import cycle
 from discord.ext import commands
+from discord.utils import get
+
+
+intents = discord.Intents(
+messages=True, guilds=True, reactions=True, members=True)
+
+client = commands.Bot(command_prefix='&', intents = intents)
 
 
 
 
-
-
-client= commands.Bot(command_prefix = "&")
+client.sniped_messages = {}
 status = cycle(["Ghilli","Pokkiri","Vettaikaran","Kaavalan","Thuppaki","Katthi","Mersal","Sarkar","Bigil"])
 
 @client.event
 async def on_ready():
     changemovies.start()
     print(f"{client.user} has connected to discord...\n")
+    client.reaction_roles = []
+
+  
 
 '''class Myclient(discord.Client):
     async def on_ready(self):
@@ -168,6 +176,12 @@ async def ban(ctx, member : discord.Member, *, reason=None):
         "Ban Hammer Stuck "
         f"{member.mention} Cannot enter this **Server**")
     await member.ban(reason=reason)
+'''@client.event
+async def on_member_join(member):
+    autorole = discord.utils.get(member.guild.roles, name = 'Barca')
+    await ctx.add_roles(autorole)'''
+
+
 
 #ramanan server
 @commands.has_permissions(administrator=True)
@@ -186,46 +200,24 @@ async def unmute(ctx, member : discord.Member, *, reason=None):
     await ctx.channel.send(f"{member.mention} has been **unmuted**")
 
 
-#abizoi server
-@commands.has_permissions(administrator=True)
-@client.command()
-async def addAU(ctx, member : discord.Member, *, reason=None):
-    AU_role = discord.utils.get(ctx.guild.roles, name="AMONG US")
-    await member.add_roles(AU_role, reason=reason)
-    await ctx.channel.send(f"{member.mention} role alloted")
-
-@commands.has_permissions(administrator=True)
-@client.command()
-async def addbarca(ctx, member : discord.Member, *, reason=None):
-    barca_role = discord.utils.get(ctx.guild.roles, name="Barca")
-    await member.add_roles(barca_role, reason=reason)
-    await ctx.channel.send(f"{member.mention} role alloted")
-
-@commands.has_permissions(administrator=True)
-@client.command()
-async def addjuve(ctx, member : discord.Member, *, reason=None):
-    juve_role = discord.utils.get(ctx.guild.roles, name="Juventus")
-    await member.add_roles(juve_role, reason=reason)
-    await ctx.channel.send(f"{member.mention} role alloted")
-
-
-@commands.has_permissions(administrator=True)
-@client.command()
-async def addbayern(ctx, member : discord.Member, *, reason=None):
-    bayern_role = discord.utils.get(ctx.guild.roles, name="Bayern")
-    await member.add_roles(bayern_role, reason=reason)
-    await ctx.channel.send(f"{member.mention} role alloted")
-
-'''@client.command()
-async def addyallaboi(ctx, member : discord.Member, *, reason=None):
-    yallaboi_role = discord.utils.get(ctx.guild.roles, name="yallaboi")
-    await member.add_roles(yallaboi_role, reason=reason)
-    await ctx.channel.send(f"{member.mention} role alloted")'''
 
 @client.event
-async def on_member_join(ctx, member : discord.Member, *, reason=None):
-        role = discord.utils.get(member.guild.roles, name='yallaboi')
+async def on_member_join(member):
+    role = get(member.guild.roles, name="Gamer")
+    await member.add_roles(role)
+    print(f"{member} was given {role}")
+
+@client.command()
+async def addrole(ctx, role: discord.Role, member: discord.Member):
+    if ctx.author.guild_permissions.administrator:
         await member.add_roles(role)
+        await ctx.send(f"{member.mention} role alloted")
+
+@client.command()
+async def remove(ctx, role: discord.Role, member: discord.Member):
+    if ctx.author.guild_permissions.administrator:
+        await member.remove_roles(role)
+        await ctx.send(f"{member.mention} role removed")
 
 
 @commands.has_permissions(administrator=True)
@@ -405,43 +397,47 @@ async def server(ctx):
 
 #send DMS
 
+@client.command()
+async def dm(ctx, member: discord.Member, *, message):
+    await member.send(message)
+
+'''@client.command()
+async def dm_all(ctx, *, args=None):
+    if args != None:
+        members = ctx.guild.members
+        for member in members:
+            try:
+                await member.send(args)
+                print("'" + args + "' sent to: " + member.name)
+
+            except:
+                print("Couldn't send '" + args + "' to: " + member.name)
+
+    else:
+        await ctx.channel.send("A message was not provided.")'''
+        
+
+#to catch deleted msg
 @client.event
-async def on_message(message):
-    empty_array = []
-    general_channel = discord.utils.get(client.get_all_channels(), name="general")
+async def on_message_delete(message):
+    client.sniped_messages[message.guild.id] = (message.content, message.author, message.channel.name, message.created_at)
 
-    if message.author == client.user:
+@client.command()
+async def snipe(ctx):
+    try:
+        contents, author, channel_name, time = client.sniped_messages[ctx.guild.id]
+        
+    except:
+        await ctx.channel.send("Couldn't find a message to snipe!")
         return
-    if str(message.channel.type) == "private":
-        if message.attachments != empty_array:
-            files = message.attachments
-            await general_channel.send("[" + message.author.display_name + "]")
 
-            for file in files:
-                await general_channel.send(file.url)
-        else:
-            await general_channel.send("[" + message.author.display_name + "] " + message.content)
+    embed = discord.Embed(description=contents, color=discord.Color.purple(), timestamp=time)
+    embed.set_author(name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
+    embed.set_footer(text=f"Deleted in : #{channel_name}")
 
-    elif str(message.channel) == "general" and message.content.startswith("<"):
-        member_object = message.mentions[0]
-        if message.attachments != empty_array:
-            files = message.attachments
-            await member_object.send("[" + message.author.display_name + "]")
-
-            for file in files:
-                await member_object.send(file.url)
-        else:
-            index = message.content.index(" ")
-            string = message.content
-            mod_message = string[index:]
-            await member_object.send("[" + message.author.display_name + "]" + mod_message)
+    await ctx.channel.send(embed=embed)
 
 
-
-        
-    
-        
-           
                
         
 @client.command()
@@ -451,7 +447,7 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''                             
+'''client = Myclient()'''                                
 client.run("your bot token")
 
 
