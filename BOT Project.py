@@ -207,7 +207,7 @@ async def on_member_join(member):
     await member.add_roles(role)
     print(f"{member} was given {role}")
 
-@client.command()
+'''@client.command()
 async def addrole(ctx, role: discord.Role, member: discord.Member):
     if ctx.author.guild_permissions.administrator:
         await member.add_roles(role)
@@ -217,7 +217,58 @@ async def addrole(ctx, role: discord.Role, member: discord.Member):
 async def remove(ctx, role: discord.Role, member: discord.Member):
     if ctx.author.guild_permissions.administrator:
         await member.remove_roles(role)
-        await ctx.send(f"{member.mention} role removed")
+        await ctx.send(f"{member.mention} role removed")'''
+
+
+@client.event
+async def on_raw_reaction_add(payload):
+    guild = client.get_guild(payload.guild_id)
+    member = get(guild.members, id=payload.user_id)
+    # channel and message IDs should be integer:
+    if payload.channel_id == 804255122271633409 and payload.message_id == 804295191942529094:
+        if str(payload.emoji) == "<:Messirve:801506247571406850>":
+            role = get(payload.member.guild.roles, name='Barca')
+
+        elif str(payload.emoji) == "<:AmongUsDead:758633347059548211>":
+            role = get(payload.member.guild.roles, name='AMONG US')
+
+        elif str(payload.emoji) == "<:yellowglassdude:779372876699664435>":
+            role = get(payload.member.guild.roles, name='Bayern')
+
+         
+        if role is not None:
+            await payload.member.add_roles(role)
+            print(f"Assigned {member} to {role}.")
+
+        else:
+            role = discord.utils.get(guild.roles, name=payload.emoji)
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    if payload.channel_id == 804255122271633409 and payload.message_id == 804295191942529094:
+        if str(payload.emoji) == "<:Messirve:801506247571406850>":
+            guild = client.get_guild(payload.guild_id)
+            member = guild.get_member(payload.user_id)
+            role = get(guild.roles, name='Barca')
+            await member.remove_roles(role)
+            print(f"Removed {role} from {member}.")
+        elif str(payload.emoji) == "<:AmongUsDead:758633347059548211>":
+            guild = client.get_guild(payload.guild_id)
+            member = guild.get_member(payload.user_id)
+            role = get(guild.roles, name='AMONG US')
+            await member.remove_roles(role)
+            print(f"Removed {role} from {member}.")
+        elif str(payload.emoji) == "<:yellowglassdude:779372876699664435>":
+            guild = client.get_guild(payload.guild_id)
+            member = guild.get_member(payload.user_id)
+            role = get(guild.roles, name='Bayern')
+            await member.remove_roles(role)
+            print(f"Removed {role} from {member}.")
+
+        
+
+
+      
 
 
 @commands.has_permissions(administrator=True)
@@ -447,7 +498,7 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''                                
+'''client = Myclient()'''                            
 client.run("your bot token")
 
 
