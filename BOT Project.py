@@ -1,4 +1,5 @@
 import discord
+import praw
 import os
 import asyncio
 import random
@@ -7,6 +8,7 @@ from discord.ext import commands, tasks
 from itertools import cycle
 from discord.ext import commands
 from discord.utils import get
+from pathlib import Path
 
 
 intents = discord.Intents(
@@ -14,17 +16,29 @@ messages=True, guilds=True, reactions=True, members=True)
 
 client = commands.Bot(command_prefix='&', intents = intents)
 
-
+#filtered_words = [""]
 
 
 client.sniped_messages = {}
 status = cycle(["Ghilli","Pokkiri","Vettaikaran","Kaavalan","Thuppaki","Katthi","Mersal","Sarkar","Bigil"])
 
+'''@client.event
+async def on_message(msg):
+    for word in filtered_words:
+        if word in msg.content:
+            await msg.delete()
+
+    await client.process_commands(msg)'''
+
 @client.event
 async def on_ready():
     changemovies.start()
     print(f"{client.user} has connected to discord...\n")
+    #data = read_json("blacklist")
+    #client.blacklisted_users = data["blacklistedUsers"]
     client.reaction_roles = []
+    #client.blacklisted_users = []
+
 
   
 
@@ -39,48 +53,35 @@ async def on_ready():
         await message.channel.send("vanakam")'''
 
     #await client.change_presence(status=discord.Status.idle, activity=discord.Game("Ghilli"))
+#pre requistes
+#pip install praw
+#www.reddit.com/prefs/apps to create your reddit app
+reddit = praw.Reddit(client_id = "your client id",
+                     client_secret = "your client secret",
+                     username = "your username",
+                     password = "your password",
+                     user_agent = "pythonpraw"
+                     )
+@client.command()
+async def meme(ctx,subred = "memes"):
+    subreddit = reddit.subreddit("memes")
+    all_subs = []
 
-#lvls
+    top = subreddit.top(limit = 50)
+    
 
-'''m = {}
+    for submission in top:
+        all_subs.append(submission)
 
-@client.event
-async def on_ready():
-    global m
-    with open("users.json", "r") as j:
-        m = json.load(j)
-        j.close()
-    if len(m) == 0:
-        m = {}
-        for member in client.get_guild(754716663529734254).members:
-            m[str(member.id)] = {"xp" : 0, "messageCountdown" : 0}
-    print("ready")
-    while True:
-        try:
-            for member in client.get_guild(754716663529734254).members:
-                m[str(member.id)]["messageCountdown"] -= 1
-        except:
-            pass
-        await asyncio.sleep(1)
+    random_sub = random.choice(all_subs)
 
-@client.event
-async def on_message(message):
-    global m
-    if message.content == "&stop" and message.author.id == 677071327265423360:
-        with open("users.json", "w") as j:
-            j.write( json.dumps(m) )
-            j.close()
-        await client.close()
-    elif message.content == "&xp":
-        await message.channel.send( str(m[str(message.author.id)]["xp"]) )
-    elif message.author != client.user:
-        if m[str(message.author.id)]["messageCountdown"] <= 0:
-            m[str(message.author.id)]["xp"] += 10
-            m[str(message.author.id)]["messageCountdown"] = 10
+    name = random_sub.title
+    url = random_sub.url
 
-@client.event
-async def on_member_join(member):
-    m[str(member.id)] = {"xp" : 0, "messageCountdown" : 0}'''
+    em = discord.Embed(title = name)
+    em.set_image(url= url)
+
+    await ctx.send(embed= em)
 
 
 
@@ -201,11 +202,11 @@ async def unmute(ctx, member : discord.Member, *, reason=None):
 
 
 
-@client.event
+'''@client.event
 async def on_member_join(member):
     role = get(member.guild.roles, name="Gamer")
     await member.add_roles(role)
-    print(f"{member} was given {role}")
+    print(f"{member} was given {role}")'''
 
 '''@client.command()
 async def addrole(ctx, role: discord.Role, member: discord.Member):
@@ -219,7 +220,7 @@ async def remove(ctx, role: discord.Role, member: discord.Member):
         await member.remove_roles(role)
         await ctx.send(f"{member.mention} role removed")'''
 
-
+#role-reaction-abizoi-server
 @client.event
 async def on_raw_reaction_add(payload):
     guild = client.get_guild(payload.guild_id)
@@ -265,10 +266,52 @@ async def on_raw_reaction_remove(payload):
             await member.remove_roles(role)
             print(f"Removed {role} from {member}.")
 
-        
+'''@client.event
+async def on_message(message):
+    #ignore ourselves
+    if message.author.id == client.user.id:
+        return
+
+    #blacklist system
+    if message.author.id in client.blacklisted_users:
+        return
+
+    if message.content.lower().startswith("help"):
+        await message.channel.send("Hey! Why don't you run the help command with `&help`")
+    
+    
+    await client.process_commands(message)'''
+
+'''def read_json(filename):
+    with open("blacklist.json", "r") as file:
+        data = json.load(file)
+    return data
+
+def write_json(data, filename):
+    with open("blacklist.json", "w") as file:
+        json.dump(data, file, indent=4)
 
 
-      
+@client.command()
+async def blacklist(ctx, user: discord.Member):
+    if ctx.message.author.id == user.id:
+        await ctx.send("Hey, you cannot blacklist yourself!")
+        return
+
+    client.blacklisted_users.append(user.id)
+    data = read_json("blacklist")
+    data["blacklistedUsers"].append(user.id)
+    write_json(data, "blacklist")
+    await ctx.send(f"Hey, I have blacklisted {user.name} for you.")
+
+@client.command()
+async def unblacklist(ctx, user: discord.Member):
+    client.blacklisted_users.remove(user.id)
+    data = read_json("blacklist")
+    data["blacklistedUsers"].remove(user.id)
+    write_json(data, "blacklist")
+    await ctx.send(f"Hey, I have unblacklisted {user.name} for you.")'''
+
 
 
 @commands.has_permissions(administrator=True)
@@ -498,7 +541,7 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''                            
+'''client = Myclient()'''                                  
 client.run("your bot token")
 
 
