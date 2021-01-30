@@ -16,41 +16,28 @@ messages=True, guilds=True, reactions=True, members=True)
 
 client = commands.Bot(command_prefix='&', intents = intents)
 
-#filtered_words = [""]
+filtered_words = ["fuck","FUCK","stfu","bitch"]
 
 
 client.sniped_messages = {}
 status = cycle(["Ghilli","Pokkiri","Vettaikaran","Kaavalan","Thuppaki","Katthi","Mersal","Sarkar","Bigil"])
 
-'''@client.event
+@client.event
 async def on_message(msg):
     for word in filtered_words:
         if word in msg.content:
             await msg.delete()
 
-    await client.process_commands(msg)'''
+    await client.process_commands(msg)
 
 @client.event
 async def on_ready():
     changemovies.start()
     print(f"{client.user} has connected to discord...\n")
-    #data = read_json("blacklist")
-    #client.blacklisted_users = data["blacklistedUsers"]
     client.reaction_roles = []
-    #client.blacklisted_users = []
-
-
   
 
-'''class Myclient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as {0}!'.format(self.user))
-
-    async def on_message(self, message):
-        print('Message from {0.author}: {0.content}'.format(message))
-        if message.author.bot:
-            return
-        await message.channel.send("vanakam")'''
+  
 
     #await client.change_presence(status=discord.Status.idle, activity=discord.Game("Ghilli"))
 #pre requistes
@@ -82,6 +69,51 @@ async def meme(ctx,subred = "memes"):
     em.set_image(url= url)
 
     await ctx.send(embed= em)
+
+
+@client.command()
+async def pc(ctx,subred = "pcmasterrace"):
+    subreddit = reddit.subreddit("pcmasterrace")
+    all_subs = []
+
+    top = subreddit.top(limit = 50)
+    
+
+    for submission in top:
+        all_subs.append(submission)
+
+    random_sub = random.choice(all_subs)
+
+    name = random_sub.title
+    url = random_sub.url
+
+    em = discord.Embed(title = name)
+    em.set_image(url= url)
+
+    await ctx.send(embed= em)
+
+@client.command()
+async def amongus(ctx,subred = "AmongUs"):
+    subreddit = reddit.subreddit("AmongUs")
+    all_subs = []
+
+    top = subreddit.top(limit = 50)
+    
+
+    for submission in top:
+        all_subs.append(submission)
+
+    random_sub = random.choice(all_subs)
+
+    name = random_sub.title
+    url = random_sub.url
+
+    em = discord.Embed(title = name)
+    em.set_image(url= url)
+
+    await ctx.send(embed= em)    
+
+
 
 
 
@@ -266,53 +298,6 @@ async def on_raw_reaction_remove(payload):
             await member.remove_roles(role)
             print(f"Removed {role} from {member}.")
 
-'''@client.event
-async def on_message(message):
-    #ignore ourselves
-    if message.author.id == client.user.id:
-        return
-
-    #blacklist system
-    if message.author.id in client.blacklisted_users:
-        return
-
-    if message.content.lower().startswith("help"):
-        await message.channel.send("Hey! Why don't you run the help command with `&help`")
-    
-    
-    await client.process_commands(message)'''
-
-'''def read_json(filename):
-    with open("blacklist.json", "r") as file:
-        data = json.load(file)
-    return data
-
-def write_json(data, filename):
-    with open("blacklist.json", "w") as file:
-        json.dump(data, file, indent=4)
-
-
-@client.command()
-async def blacklist(ctx, user: discord.Member):
-    if ctx.message.author.id == user.id:
-        await ctx.send("Hey, you cannot blacklist yourself!")
-        return
-
-    client.blacklisted_users.append(user.id)
-    data = read_json("blacklist")
-    data["blacklistedUsers"].append(user.id)
-    write_json(data, "blacklist")
-    await ctx.send(f"Hey, I have blacklisted {user.name} for you.")
-
-@client.command()
-async def unblacklist(ctx, user: discord.Member):
-    client.blacklisted_users.remove(user.id)
-    data = read_json("blacklist")
-    data["blacklistedUsers"].remove(user.id)
-    write_json(data, "blacklist")
-    await ctx.send(f"Hey, I have unblacklisted {user.name} for you.")'''
-
-
 
 @commands.has_permissions(administrator=True)
 @client.command()
@@ -495,20 +480,7 @@ async def server(ctx):
 async def dm(ctx, member: discord.Member, *, message):
     await member.send(message)
 
-'''@client.command()
-async def dm_all(ctx, *, args=None):
-    if args != None:
-        members = ctx.guild.members
-        for member in members:
-            try:
-                await member.send(args)
-                print("'" + args + "' sent to: " + member.name)
 
-            except:
-                print("Couldn't send '" + args + "' to: " + member.name)
-
-    else:
-        await ctx.channel.send("A message was not provided.")'''
         
 
 #to catch deleted msg
@@ -541,7 +513,7 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''                                  
+'''client = Myclient()'''                            
 client.run("your bot token")
 
 
