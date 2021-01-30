@@ -16,7 +16,7 @@ messages=True, guilds=True, reactions=True, members=True)
 
 client = commands.Bot(command_prefix='&', intents = intents)
 
-filtered_words = ["fuck","FUCK","stfu","bitch"]
+filtered_words = ["give your list of filtered words"]
 
 
 client.sniped_messages = {}
