@@ -4,6 +4,9 @@ import os
 import asyncio
 import random
 import json
+import platform
+import datetime
+from discord import Embed, Color
 from discord.ext import commands, tasks
 from itertools import cycle
 from discord.ext import commands
@@ -16,7 +19,9 @@ messages=True, guilds=True, reactions=True, members=True)
 
 client = commands.Bot(command_prefix='&', intents = intents)
 
-filtered_words = ["give your list of filtered words"]
+
+
+filtered_words = ["your filtered words"]
 
 
 client.sniped_messages = {}
@@ -30,11 +35,43 @@ async def on_message(msg):
 
     await client.process_commands(msg)
 
+
+@client.command()
+async def stats(ctx, member: discord.Member):
+    roles = [role for role in member.roles]
+
+    embed = discord.Embed(color=member.color, timestamp=datetime.datetime.utcnow())
+
+    embed.set_author(name=f"{member}", icon_url=member.avatar_url)
+
+    embed.set_image(url=member.avatar_url)
+
+    embed.add_field(name="Joined at:", value=member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
+
+    embed.add_field(name="Joined Discord on:", value=member.created_at.strftime("%a, %d %B, %Y, %I:%M %p UTC"), inline=False)
+
+    embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]))
+
+    embed.add_field(name="Top role:", value=member.top_role.mention)
+
+    embed.add_field(name="Bot?", value=member.bot)
+    embed.set_footer(text=f"Requested By: {ctx.author.name}")
+
+    await ctx.send(embed=embed)
+
 @client.event
 async def on_ready():
     changemovies.start()
     print(f"{client.user} has connected to discord...\n")
+    #time = datetime.datetime.now()
+    #print("wiki search online at {}".format(time))
+
     client.reaction_roles = []
+
+
+
+        
+        
   
 
   
@@ -51,10 +88,15 @@ reddit = praw.Reddit(client_id = "your client id",
                      )
 @client.command()
 async def meme(ctx,subred = "memes"):
+    """
+    gets memes from r\memes.
+    """
+    
+    
     subreddit = reddit.subreddit("memes")
     all_subs = []
 
-    top = subreddit.top(limit = 50)
+    top = subreddit.top(limit = 200)
     
 
     for submission in top:
@@ -73,10 +115,18 @@ async def meme(ctx,subred = "memes"):
 
 @client.command()
 async def pc(ctx,subred = "pcmasterrace"):
+
+    """
+    gets builds,memes from r\pcmasterrace.
+    """
+
+    
+
+
     subreddit = reddit.subreddit("pcmasterrace")
     all_subs = []
 
-    top = subreddit.top(limit = 50)
+    top = subreddit.top(limit = 200)
     
 
     for submission in top:
@@ -94,10 +144,14 @@ async def pc(ctx,subred = "pcmasterrace"):
 
 @client.command()
 async def amongus(ctx,subred = "AmongUs"):
+
+    """
+    gets amongus memes from r\Amongus.
+    """
     subreddit = reddit.subreddit("AmongUs")
     all_subs = []
 
-    top = subreddit.top(limit = 50)
+    top = subreddit.top(limit = 200)
     
 
     for submission in top:
@@ -111,14 +165,20 @@ async def amongus(ctx,subred = "AmongUs"):
     em = discord.Embed(title = name)
     em.set_image(url= url)
 
-    await ctx.send(embed= em)    
+    await ctx.send(embed= em)
+
+@client.command()
+async def warn(ctx, member : discord.Member, *, reason=None):
+    embed = Embed(color=discord.Color.gold())
+    embed.set_footer(text=f"Timestamp: {time.ctime()}\nInvoked by {ctx.author}", icon_url=ctx.author.avatar_url)
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+    embed.add_field(name=f"WARNING!!",
+                        value=f"{member.mention} you got a warn in the server from {ctx.author.mention} for the following reason:\n**{reason}**.")
+
+    await ctx.send(embed=embed)
 
 
 
-
-
-
-    
 
   
 #Fortune teller
@@ -214,6 +274,14 @@ async def on_member_join(member):
     autorole = discord.utils.get(member.guild.roles, name = 'Barca')
     await ctx.add_roles(autorole)'''
 
+@client.command()
+async def echo(ctx, *, message=None):
+    """
+    repeats back the user words.
+    """
+    message = message or "Please provide the message to be repeated."
+    #await ctx.message.delete()
+    await ctx.send(message)
 
 
 #ramanan server
@@ -251,6 +319,8 @@ async def remove(ctx, role: discord.Role, member: discord.Member):
     if ctx.author.guild_permissions.administrator:
         await member.remove_roles(role)
         await ctx.send(f"{member.mention} role removed")'''
+
+
 
 #role-reaction-abizoi-server
 @client.event
@@ -300,13 +370,13 @@ async def on_raw_reaction_remove(payload):
 
 
 @commands.has_permissions(administrator=True)
-@client.command()
+@client.command(aliases=['purge','clear','b'])
 async def shoot(ctx, amount=3):
     await ctx.channel.purge(limit=amount)
 
 @client.command()
 async def ping(ctx):
-    await ctx.send(f'pong! {round(client.latency*1000)}ms<a:cat_vibing:753973817608634468>')
+    await ctx.send(f'pong! {round(client.latency*1000)}ms<:Messirve:801506247571406850>')
 
 #TTT
 
@@ -513,8 +583,5 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''                            
-client.run("your bot token")
-
-
-
+'''client = Myclient()'''  
+client.run(your bots token)
