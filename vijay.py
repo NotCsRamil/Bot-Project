@@ -3,7 +3,6 @@ import praw
 import os
 import asyncio
 import random
-import json
 import platform
 import datetime
 from discord import Embed, Color
