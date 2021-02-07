@@ -21,11 +21,11 @@ client = commands.Bot(command_prefix='&', intents = intents)
 
 
 
-filtered_words = ["your filtered words"]
+filtered_words = ["vigae","VIGAE","Vigae"]
 
 
 client.sniped_messages = {}
-status = cycle(["Ghilli","Pokkiri","Vettaikaran","Kaavalan","Thuppaki","Katthi","Mersal","Sarkar","Bigil"])
+#status = cycle(["Ghilli","Pokkiri","Vettaikaran","Kaavalan","Thuppaki","Katthi","Mersal","Sarkar","Bigil"])
 
 @client.event
 async def on_message(msg):
@@ -61,8 +61,9 @@ async def stats(ctx, member: discord.Member):
 
 @client.event
 async def on_ready():
-    changemovies.start()
+    #changemovies.start()
     print(f"{client.user} has connected to discord...\n")
+    await client.change_presence(status=discord.Status.online, activity=discord.Game("Vaathi Raid"))
     #time = datetime.datetime.now()
     #print("wiki search online at {}".format(time))
 
@@ -76,15 +77,13 @@ async def on_ready():
 
   
 
-    #await client.change_presence(status=discord.Status.idle, activity=discord.Game("Ghilli"))
-#pre requistes
-#pip install praw
-#www.reddit.com/prefs/apps to create your reddit app
-reddit = praw.Reddit(client_id = "your client id",
-                     client_secret = "your client secret",
-                     username = "your username",
-                     password = "your password",
-                     user_agent = "pythonpraw"
+reddit = praw.Reddit(client_id = "XbpGg2yOepX2ow",
+                     client_secret = "gf2mKU5HUV8f62E4lXpRPnZpw-eufA",
+                     username = "SerialKiller605",
+                     password = "Dellg3@2020",
+                     user_agent = "pythonpraw",
+                     check_for_async=False
+                     
                      )
 @client.command()
 async def meme(ctx,subred = "memes"):
@@ -229,16 +228,7 @@ async def on_command_error(ctx , error):
     await ctx.send(f'Thendi wrong command {ctx.message.author.mention}')
     await ctx.send(error)
 
-'''#guess game
-@client.command()
-async def guess(message, number: int):
-    value = random.randint(1, 6)
-    if number == value:
-        await message.add_reaction(emoji = "✅")
-    else:
-        await message.add_reaction(emoji = "❌")'''
 
-#vijays lines
 @client.command()
 async def punch(ctx,arg):
     punchs = {
@@ -541,6 +531,7 @@ async def server(ctx):
     embed.add_field(name="Server ID", value=id, inline=True)
     embed.add_field(name="Region", value=region, inline=True)
     embed.add_field(name="Member Count", value=memberCount, inline=True)
+    
 
     await ctx.send(embed=embed)
 
@@ -550,6 +541,16 @@ async def server(ctx):
 async def dm(ctx, member: discord.Member, *, message):
     await member.send(message)
 
+#poll command
+@client.command()
+async def poll(ctx,*args):
+    embed = discord.Embed(title = f"POLLING\n{' '.join(args)}" , colour = discord.Colour.red())
+    embed.description = f"YES: 🇾 \n\nNO : 🇳 "
+    #embed.set_image(url = 'https://th.thgim.com/migration_catalog/article11163206.ece/alternates/FREE_435/modi%20symbol')
+    message = await ctx.send(embed = embed)
+    await message.add_reaction(emoji = '🇾')
+    await message.add_reaction(emoji = '🇳')
+    
 
         
 
@@ -583,5 +584,9 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''  
-client.run(your bots token)
+'''client = Myclient()'''                                     
+client.run("NzY2MjY0Njc1MzQ4MTE5NTUy.X4g1lw.NwjUbbIT9VtBeINDCe_uxX4CD0M")
+
+
+
+
