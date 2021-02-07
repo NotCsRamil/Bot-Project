@@ -1,2 +1,2 @@
 discord.py>=1.3.4
-Praw>=7.1.6
+
