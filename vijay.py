@@ -1,5 +1,5 @@
 import discord
-import praw
+#import praw
 import os
 import asyncio
 import random
@@ -76,7 +76,7 @@ async def on_ready():
 
   
 
-reddit = praw.Reddit(client_id = "XbpGg2yOepX2ow",
+'''reddit = praw.Reddit(client_id = "XbpGg2yOepX2ow",
                      client_secret = "gf2mKU5HUV8f62E4lXpRPnZpw-eufA",
                      username = "SerialKiller605",
                      password = "Dellg3@2020",
@@ -163,7 +163,7 @@ async def amongus(ctx,subred = "AmongUs"):
     em = discord.Embed(title = name)
     em.set_image(url= url)
 
-    await ctx.send(embed= em)
+    await ctx.send(embed= em)'''
 
 @client.command()
 async def warn(ctx, member : discord.Member, *, reason=None):
