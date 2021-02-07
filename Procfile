@@ -1,1 +1,1 @@
-worker: python BOT Project.py
+worker: python vijay.py
