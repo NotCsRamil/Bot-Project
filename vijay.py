@@ -77,10 +77,10 @@ async def on_ready():
 
   
 
-'''reddit = praw.Reddit(client_id = "XbpGg2yOepX2ow",
-                     client_secret = "gf2mKU5HUV8f62E4lXpRPnZpw-eufA",
-                     username = "SerialKiller605",
-                     password = "Dellg3@2020",
+'''reddit = praw.Reddit(client_id = "",
+                     client_secret = "",
+                     username = "",
+                     password = "",
                      user_agent = "pythonpraw",
                      check_for_async=False
                      
