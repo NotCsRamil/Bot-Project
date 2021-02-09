@@ -5,6 +5,7 @@ import asyncio
 import random
 import platform
 import datetime
+import time
 from discord import Embed, Color
 from discord.ext import commands, tasks
 from itertools import cycle
