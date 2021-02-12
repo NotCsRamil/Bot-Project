@@ -541,6 +541,12 @@ async def server(ctx):
 async def dm(ctx, member: discord.Member, *, message):
     await member.send(message)
 
+@client.command()
+async def announce(ctx, channel : discord.TextChannel, *, message):
+    await channel.send(f"{message}")
+
+
+
 #poll command
 @client.command()
 async def poll(ctx,*args):
