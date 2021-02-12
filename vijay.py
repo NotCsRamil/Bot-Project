@@ -270,7 +270,7 @@ async def echo(ctx, *, message=None):
     repeats back the user words.
     """
     message = message or "Please provide the message to be repeated."
-    #await ctx.message.delete()
+    await ctx.message.delete()
     await ctx.send(message)
 
 
@@ -539,12 +539,13 @@ async def server(ctx):
 
 @client.command()
 async def dm(ctx, member: discord.Member, *, message):
+    await ctx.message.delete()
     await member.send(message)
 
 @client.command()
 async def announce(ctx, channel : discord.TextChannel, *, message):
+    await ctx.message.delete()
     await channel.send(f"{message}")
-
 
 
 #poll command
