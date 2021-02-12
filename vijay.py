@@ -547,6 +547,23 @@ async def announce(ctx, channel : discord.TextChannel, *, message):
     await ctx.message.delete()
     await channel.send(f"{message}")
 
+@client.command()
+async def dm_all(ctx, *, args=None):
+    if args != None:
+        members = ctx.guild.members
+        for member in members:
+            try:
+                await member.send(args)
+                print("'" + args + "' sent to: " + member.name)
+ 
+            except:
+                print("Couldn't send '" + args + "' to: " + member.name)
+ 
+    else:
+        await ctx.channel.send("A message was not provided.")
+
+
+
 
 #poll command
 @client.command()
