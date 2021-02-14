@@ -84,7 +84,6 @@ reddit = praw.Reddit(client_id = "XbpGg2yOepX2ow",
                      user_agent = "pythonpraw",
                      check_for_async=False
                      
-                     )
 @client.command()
 async def meme(ctx,subred = "memes"):
     """
@@ -95,10 +94,10 @@ async def meme(ctx,subred = "memes"):
     subreddit = reddit.subreddit("memes")
     all_subs = []
 
-    top = subreddit.top(limit = 200)
+    hot = subreddit.hot(limit = 200)
     
 
-    for submission in top:
+    for submission in hot:
         all_subs.append(submission)
 
     random_sub = random.choice(all_subs)
@@ -125,10 +124,10 @@ async def pc(ctx,subred = "pcmasterrace"):
     subreddit = reddit.subreddit("pcmasterrace")
     all_subs = []
 
-    top = subreddit.top(limit = 200)
+    hot = subreddit.hot(limit = 200)
     
 
-    for submission in top:
+    for submission in hot:
         all_subs.append(submission)
 
     random_sub = random.choice(all_subs)
@@ -150,10 +149,10 @@ async def amongus(ctx,subred = "AmongUs"):
     subreddit = reddit.subreddit("AmongUs")
     all_subs = []
 
-    top = subreddit.top(limit = 200)
+    hot = subreddit.hot(limit = 200)
     
 
-    for submission in top:
+    for submission in hot:
         all_subs.append(submission)
 
     random_sub = random.choice(all_subs)
