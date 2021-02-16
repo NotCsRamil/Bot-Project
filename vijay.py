@@ -243,11 +243,12 @@ async def punch(ctx,arg):
 
 #admin commands
 @commands.has_permissions(administrator=True)
-@client.command()
+@client.command(aliases=["redcard"])
 async def kick(ctx, member : discord.Member, *, reason=None):
     await ctx.channel.send(
-        "Command Executed BOSS "
-        f"{member.mention} has been **kicked**")
+        "I see you want a free **Kick**. Have one!"
+ 
+        f"{member.mention}")
     await member.kick(reason=reason)
 
 
@@ -255,8 +256,9 @@ async def kick(ctx, member : discord.Member, *, reason=None):
 @client.command()
 async def ban(ctx, member : discord.Member, *, reason=None):
     await ctx.channel.send(
-        "Ban Hammer Stuck "
-        f"{member.mention} Cannot enter this **Server**")
+        "I see you want a free **Ban**. Have one!"
+ 
+        f"{member.mention}")
     await member.ban(reason=reason)
 '''@client.event
 async def on_member_join(member):
