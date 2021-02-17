@@ -563,7 +563,6 @@ async def dm_all(ctx, *, args=None):
     else:
         await ctx.channel.send("A message was not provided.")
 
-#join and leave events
 @client.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.text_channels, name="member-logs")
