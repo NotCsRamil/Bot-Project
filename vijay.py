@@ -566,7 +566,7 @@ async def dm_all(ctx, *, args=None):
 #join and leave events
 @client.event
 async def on_member_join(member):
-    channel = discord.utils.get(member.guild.text_channels, name="welcome")
+    channel = discord.utils.get(member.guild.text_channels, name="member-logs")
     if channel:
         embed = discord.Embed(
                 description="Welcome to Yallabois F.C ",
@@ -581,7 +581,7 @@ async def on_member_join(member):
 
 @client.event
 async def on_member_remove(member):
-    channel = discord.utils.get(member.guild.text_channels, name="welcome")
+    channel = discord.utils.get(member.guild.text_channels, name="member-logs")
     if channel:
         embed = discord.Embed(
                 description="Goodbye from all of us.. ",
