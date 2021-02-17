@@ -84,6 +84,7 @@ reddit = praw.Reddit(client_id = "XbpGg2yOepX2ow",
                      user_agent = "pythonpraw",
                      check_for_async=False
                      
+                     )
 @client.command()
 async def meme(ctx,subred = "memes"):
     """
@@ -260,6 +261,9 @@ async def ban(ctx, member : discord.Member, *, reason=None):
  
         f"{member.mention}")
     await member.ban(reason=reason)
+
+
+    
 '''@client.event
 async def on_member_join(member):
     autorole = discord.utils.get(member.guild.roles, name = 'Barca')
@@ -277,7 +281,7 @@ async def echo(ctx, *, message=None):
 
 #ramanan server
 @commands.has_permissions(administrator=True)
-@client.command()
+@client.command(aliases=["yellowcard"])
 async def mute(ctx, member : discord.Member, *, reason=None):
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
         await member.add_roles(mute_role, reason=reason)
@@ -592,13 +596,6 @@ async def on_member_remove(member):
         embed.timestamp = datetime.datetime.utcnow()
 
         await channel.send(embed=embed)
-                     
-                     
-                     
-
-
-
-
 #poll command
 @client.command()
 async def poll(ctx,*args):
@@ -644,7 +641,6 @@ async def poda(ctx):
         await ctx.send('You messed With the Wrong Person')
 '''client = Myclient()'''                                     
 client.run("NzY2MjY0Njc1MzQ4MTE5NTUy.X4g1lw.NwjUbbIT9VtBeINDCe_uxX4CD0M")
-
 
 
 
