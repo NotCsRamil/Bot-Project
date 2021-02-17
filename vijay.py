@@ -563,6 +563,40 @@ async def dm_all(ctx, *, args=None):
     else:
         await ctx.channel.send("A message was not provided.")
 
+#join and leave events
+@client.event
+async def on_member_join(member):
+    channel = discord.utils.get(member.guild.text_channels, name="welcome")
+    if channel:
+        embed = discord.Embed(
+                description="Welcome to Yallabois F.C ",
+                color=discord.Colour.red(),
+            )
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.set_author(name=member.name, icon_url=member.avatar_url)
+        embed.set_footer(text=member.guild, icon_url=member.guild.icon_url)
+        embed.timestamp = datetime.datetime.utcnow()
+
+        await channel.send(embed=embed)
+
+@client.event
+async def on_member_remove(member):
+    channel = discord.utils.get(member.guild.text_channels, name="welcome")
+    if channel:
+        embed = discord.Embed(
+                description="Goodbye from all of us.. ",
+                color=discord.Colour.red(),
+            )
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.set_author(name=member.name, icon_url=member.avatar_url)
+        embed.set_footer(text=member.guild, icon_url=member.guild.icon_url)
+        embed.timestamp = datetime.datetime.utcnow()
+
+        await channel.send(embed=embed)
+                     
+                     
+                     
+
 
 
 
