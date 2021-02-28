@@ -638,8 +638,7 @@ async def poda(ctx):
         await ctx.send('Ok BOSS <a:polish_cow:767665553187012639>')
         await client.logout()
     else :
-        await ctx.send('You messed With the Wrong Person')
-'''client = Myclient()'''                                     
+        await ctx.send('You messed With the Wrong Person')                                   
 client.run("NzY2MjY0Njc1MzQ4MTE5NTUy.X4g1lw.NwjUbbIT9VtBeINDCe_uxX4CD0M")
 
 
