@@ -614,7 +614,7 @@ async def poll(ctx,*args):
 async def on_message_delete(message):
     client.sniped_messages[message.guild.id] = (message.content, message.author, message.channel.name, message.created_at)
 
-@client.command()
+@client.command(aliases=["sike"])
 async def snipe(ctx):
     try:
         contents, author, channel_name, time = client.sniped_messages[ctx.guild.id]
