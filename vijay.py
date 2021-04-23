@@ -639,7 +639,7 @@ async def poda(ctx):
         await client.logout()
     else :
         await ctx.send('You messed With the Wrong Person')                                   
-client.run("NzY2MjY0Njc1MzQ4MTE5NTUy.X4g1lw.NwjUbbIT9VtBeINDCe_uxX4CD0M")
+client.run("")
 
 
 
